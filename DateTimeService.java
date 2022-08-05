@@ -32,7 +32,7 @@ public class DateTimeService {
 		}
 		cal.setTime(date);
 		cal.add(Calendar.DATE, day);
-		result = sdf.format(cal);
+		result = sdf.format(cal.getTime());
 		return result;
 	}
 	

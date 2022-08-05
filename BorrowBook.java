@@ -1,4 +1,5 @@
-package day1test;
+package Day1;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class BorrowBook {
 	public boolean checkSuspention() {
 		boolean flag = false;
 		String susDate = student.getStop_date();
-		if (susDate.equals("0") ) {
+		if (susDate.equals("") ) {
 			flag = false;
 		} else if ((Integer.parseInt(susDate) - Integer.parseInt(dts.getNow())) > 0){
 			flag = true;
@@ -32,7 +33,7 @@ public class BorrowBook {
 		boolean flag = false;
 		ArrayList<LoanVO> list = new ArrayList<LoanVO>();
 		try {
-			list = dao.selectRentalBook(book.getBook_no());
+			list = dao.selectRentalBook(student.getStd_no());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,13 +71,16 @@ public class BorrowBook {
 		String loanDate = dts.getNow();
 		String returnDate = dts.calDate(loanDate, 7);
 		ArrayList<LoanVO> list = new ArrayList<LoanVO>();
-		LoanVO vo = new LoanVO(1, loanDate, returnDate, student.getStd_no(),book.getBook_no(),null,"N");
+		LoanVO vo = new LoanVO(1, loanDate, returnDate, student.getStd_no(),book.getBook_no(),"","N");
+		int loancnt = this.student.getLoan_cnt()+1;
 		list.add(vo);
 		try {
 			// 대출장부 입력
 			dao.insertRentalBook(list);
 			// 도서에 렌탈여부 변경
 			dao.updateRentalBook("N", book.getBook_no());
+			// 학생에 대출권수 추가
+			dao.updateStudent(loancnt, student.getStd_no());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

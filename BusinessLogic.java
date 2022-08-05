@@ -10,24 +10,24 @@ public class BusinessLogic {
 		boolean borrowable = false;
 
 		borrowable = bb.checkSuspention();
-		if (!borrowable) {
-			System.out.println("대출정지된 학생입니다.");
+		if (borrowable) {
 			bb.borrowCancell();
+			System.out.println("대출정지된 학생입니다.");
 		} else {
 			borrowable = bb.checkUnreturnBook();
-			if (!borrowable) {
-				System.out.println("미반납도서 중 연체도서가 있습니다.");
+			if (borrowable) {
 				bb.borrowCancell();
+				System.out.println("미반납도서 중 연체도서가 있습니다.");
 			} else {
 				borrowable = bb.checkBrrowable();
 				if (!borrowable) {
-					System.out.println("도서대여는 5권까지 가능합니다.");
 					bb.borrowCancell();
+					System.out.println("도서대여는 5권까지 가능합니다.");
 				} else {
 					borrowable = bb.checkHaveBook();
 					if (borrowable) {
-						System.out.println("도서대여가 완료되었습니다.");
 						bb.borrowConfirm();
+						System.out.println("도서대여가 완료되었습니다.");
 					} else {
 						System.out.println("해당 도서는 모두 대여중 입니다. 예약하시겠습니까?  >> Y/N");
 						Scanner scan = new Scanner(System.in);

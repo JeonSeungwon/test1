@@ -1,4 +1,4 @@
-package day1test;
+package Day1;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,8 +9,7 @@ import java.util.Date;
 public class DateTimeService {
 
 	public String getNow() {
-
-		// 경우에 따라 날짜, 시간, 날짜+시간 정보를 제공한다.
+		//현재시간을 yyyyMMdd 형태의 String으로 반환
 		String now = null;
 		String pattern = "yyyyMMdd";
 		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -20,6 +19,7 @@ public class DateTimeService {
 	}
 	
 	public String calDate(String now, int day) {
+		// yyyyMMdd 형태의 String 날짜와 int dat를 입력받아 날짜에 day를 더해서 string반환
 		String result = null;
 		Date date = null;
 		Calendar cal = Calendar.getInstance();

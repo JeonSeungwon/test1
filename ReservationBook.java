@@ -1,11 +1,11 @@
-package day1test;
+package Day1;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ReservationBook {
 	
-	static StudentVO student;
+	StudentVO student;
 	BookVO book;
 	static LibraryDAO dao = new LibraryDAO();
 	static DateTimeService now = new DateTimeService(); 
@@ -33,14 +33,50 @@ public class ReservationBook {
 		return flag;
 	}
 	
+	// 학생이 해당 책을 대출 또는 예약중인지 확인
+	public boolean checkLoanOrRsrv() throws SQLException {
+		boolean flag1 = false;
+		boolean flag2 = false;
+		ArrayList<LoanVO> loanList = new ArrayList<LoanVO>();
+		loanList = dao.selectRentalBook(student.getStd_no());
+		for (LoanVO vo : loanList) {
+			if (vo.getReturn_yn().equals("N")){
+				if (vo.getBook_no() == book.getBook_no()) {
+					flag1 = true;
+					break;
+				}
+			}
+		}
+		ArrayList<ReservationVO> rsrvList = new ArrayList<ReservationVO>();
+		rsrvList = dao.selectReserveBook(student.getStd_no());
+		for (ReservationVO vo : rsrvList) {
+			if (vo.getRsrv_yn().equals("Y")){
+				if (vo.getStd_no() == student.getStd_no()) {
+					flag2 = true;
+					break;
+				}
+			}
+		}
+		
+		
+		return (flag1 && flag2);
+	}
+	
 	// 도서 예약 실행
 	public boolean reservationConfirm() {
 		boolean flag = false;
 		ArrayList<ReservationVO> list = new ArrayList<ReservationVO>();
 		ReservationVO vo = new ReservationVO(1, now.getNow(), student.getStd_no(), book.getBook_no() );
 		list.add(vo) ;
+		int bookRsrvCnt = book.getRsrv_people()+1;
+		int stdRsrvCnt = student.getRsrv_cnt()+1;
 		try {
+			// 예약장부 입력
 			dao.insertReserveBook(list);
+			// 도서에 예약인원 추가
+			dao.updateRentalBook(bookRsrvCnt, book.getBook_no());	
+			// 학생에 예약권수 추가
+			dao.updateStudent(stdRsrvCnt, student.getStd_no());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

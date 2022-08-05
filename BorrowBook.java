@@ -19,7 +19,9 @@ public class BorrowBook {
 	public boolean checkSuspention() {
 		boolean flag = false;
 		String susDate = student.getStop_date();
-		if ((Integer.parseInt(susDate) - Integer.parseInt(dts.getNow())) > 0) {
+		if (susDate.equals("0") ) {
+			flag = false;
+		} else if ((Integer.parseInt(susDate) - Integer.parseInt(dts.getNow())) > 0){
 			flag = true;
 		}
 		return flag;
@@ -68,7 +70,7 @@ public class BorrowBook {
 		String loanDate = dts.getNow();
 		String returnDate = dts.calDate(loanDate, 7);
 		ArrayList<LoanVO> list = new ArrayList<LoanVO>();
-		LoanVO vo = new LoanVO(1, loanDate, returnDate, student.getStd_no(),book.getBook_no(),null,null);
+		LoanVO vo = new LoanVO(1, loanDate, returnDate, student.getStd_no(),book.getBook_no(),null,"N");
 		list.add(vo);
 		try {
 			// 대출장부 입력
